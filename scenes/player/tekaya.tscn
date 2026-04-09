@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dsmn575ms4yh"]
+[gd_scene load_steps=5 format=3 uid="uid://dsmn575ms4yh"]
 
 [ext_resource type="Script" path="res://scripts/tekaya.gd" id="1_ja0we"]
 
@@ -7,6 +7,9 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ch03j"]
 radius = 16.0
 height = 48.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wgdx7"]
+size = Vector2(29, 20)
 
 [node name="Tekaya" type="CharacterBody2D"]
 script = ExtResource("1_ja0we")
@@ -20,3 +23,11 @@ texture = SubResource("PlaceholderTexture2D_mqvke")
 shape = SubResource("CapsuleShape2D_ch03j")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Hitbox" type="Area2D" parent="."]
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(30.5, 0)
+shape = SubResource("RectangleShape2D_wgdx7")
