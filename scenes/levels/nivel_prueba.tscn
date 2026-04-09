@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2nrmhdibolff"]
+
+[ext_resource type="PackedScene" uid="uid://dsmn575ms4yh" path="res://scenes/player/tekaya.tscn" id="1_guio4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7s6c7"]
+size = Vector2(27.3906, 5.125)
+
+[node name="NivelPrueba" type="Node2D"]
+
+[node name="Suelo" type="StaticBody2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Suelo"]
+offset_left = -440.0
+offset_right = 437.0
+offset_bottom = 166.0
+color = Color(2.35841e-06, 0.749006, 0.29876, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Suelo"]
+position = Vector2(-1.25, 83)
+scale = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_7s6c7")
+
+[node name="Tekaya" parent="Suelo" instance=ExtResource("1_guio4")]
+position = Vector2(-305, -510)
