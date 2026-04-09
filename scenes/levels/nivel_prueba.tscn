@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://c2nrmhdibolff"]
+[gd_scene load_steps=5 format=3 uid="uid://c2nrmhdibolff"]
 
 [ext_resource type="PackedScene" uid="uid://dsmn575ms4yh" path="res://scenes/player/tekaya.tscn" id="1_guio4"]
+[ext_resource type="PackedScene" uid="uid://cwjto3bmnxdbt" path="res://scenes/enemies/enemigo_basico.tscn" id="2_uily5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7s6c7"]
 size = Vector2(27.3906, 5.125)
@@ -69,3 +70,6 @@ color = Color(0, 1, 1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Suelo/Plataforma3"]
 shape = SubResource("RectangleShape2D_57oob")
+
+[node name="Enemigo" parent="Suelo" instance=ExtResource("2_uily5")]
+position = Vector2(1207, 231)

@@ -31,3 +31,12 @@ monitorable = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 position = Vector2(30.5, 0)
 shape = SubResource("RectangleShape2D_wgdx7")
+
+[node name="ColorRect" type="ColorRect" parent="Hitbox"]
+offset_left = 16.0
+offset_top = -10.0
+offset_right = 45.0
+offset_bottom = 10.0
+color = Color(1, 1, 0, 1)
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

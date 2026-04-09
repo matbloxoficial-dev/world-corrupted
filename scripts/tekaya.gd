@@ -153,3 +153,11 @@ func recibir_danio(cantidad: int) -> void:
 func morir() -> void:
 	print("Tekaya ha muerto")
 	queue_free()
+
+func _on_hitbox_area_entered(area: Area2D) -> void:
+	pass
+
+func _on_hitbox_body_entered(body: Node) -> void:
+	if body.has_method("recibir_danio"):
+		var dano = DANO_CARGADO if carga_timer >= TIEMPO_CARGA else DANO_GOLPE[max(combo_paso - 1, 0)]
+		body.recibir_danio(dano)
