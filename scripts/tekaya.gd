@@ -6,6 +6,8 @@ const GRAVITY = 980.0
 const DASH_SPEED = 800.0
 const DASH_DURATION = 0.12
 const DASH_COOLDOWN = 0.8
+const DANO_PATADA = 14
+const COOLDOWN_PATADA = 3.0
 
 const MAX_HP = 80
 const INVENCIBILITY_TIME = 0.67
@@ -20,6 +22,7 @@ var dash_timer = 0.0
 var dash_cooldown_timer = 0.0
 var is_dashing = false
 var facing = 1
+var patada_cooldown = 0.0
 
 var hp = MAX_HP
 var is_invencible = false
@@ -41,7 +44,10 @@ func _physics_process(delta: float) -> void:
 
 	if dash_cooldown_timer > 0:
 		dash_cooldown_timer -= delta
-
+		
+	if patada_cooldown > 0:
+		patada_cooldown -= delta
+		
 	# Invencibilidad
 	if is_invencible:
 		invencibility_timer -= delta
@@ -107,7 +113,11 @@ func _physics_process(delta: float) -> void:
 			velocity.x = direction * SPEED
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
-
+			
+	# Patada giratoria
+	if Input.is_action_just_pressed("kick") and patada_cooldown <= 0 and not atacando:
+		_ejecutar_patada()
+		
 	move_and_slide()
 
 func _ejecutar_combo() -> void:
@@ -163,3 +173,21 @@ func _on_hitbox_body_entered(body: Node) -> void:
 	if body.has_method("recibir_danio"):
 		var dano = DANO_CARGADO if carga_timer >= TIEMPO_CARGA else DANO_GOLPE[max(combo_paso - 1, 0)]
 		body.recibir_danio(dano)
+	if body.has_method("recibir_danio"):
+		var dano: int
+		if patada_cooldown > COOLDOWN_PATADA - 0.3:
+			dano = DANO_PATADA
+		elif carga_timer >= TIEMPO_CARGA:
+			dano = DANO_CARGADO
+		else:
+			dano = DANO_GOLPE[max(combo_paso - 1, 0)]
+		body.recibir_danio(dano)
+	
+		
+func _ejecutar_patada() -> void:
+	patada_cooldown = COOLDOWN_PATADA
+	atacando = true
+	ataque_timer = 0.3
+	$Visual/Hitbox.monitoring = true
+	$Visual/Hitbox.monitorable = true
+	print("Patada giratoria — daño: ", DANO_PATADA, " | Cooldown: ", COOLDOWN_PATADA, "s")
