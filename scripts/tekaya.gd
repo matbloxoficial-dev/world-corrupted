@@ -152,8 +152,9 @@ func recibir_danio(cantidad: int) -> void:
 	modulate.a = 0.4
 
 func morir() -> void:
-	print("Tekaya ha muerto")
-	queue_free()
+	set_physics_process(false)
+	await get_tree().create_timer(1.2).timeout
+	get_tree().reload_current_scene()
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	pass
