@@ -60,8 +60,8 @@ func _physics_process(delta: float) -> void:
 		ataque_timer -= delta
 		if ataque_timer <= 0:
 			atacando = false
-			$Hitbox.monitoring = false
-			$Hitbox.monitorable = false
+			$Visual/Hitbox.monitoring = false
+			$Visual/Hitbox.monitorable = false
 
 	# Carga del ataque cargado
 	if cargando:
@@ -103,7 +103,7 @@ func _physics_process(delta: float) -> void:
 		var direction = Input.get_axis("move_left", "move_right")
 		if direction != 0:
 			facing = 1 if direction > 0 else -1
-			$Sprite2D.flip_h = facing == -1
+			$Visual.scale.x = facing
 			velocity.x = direction * SPEED
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
@@ -117,8 +117,8 @@ func _ejecutar_combo() -> void:
 	ataque_timer = 0.25
 
 	# Activa hitbox
-	$Hitbox.monitoring = true
-	$Hitbox.monitorable = true
+	$Visual/Hitbox.monitoring = false
+	$Visual/Hitbox.monitorable = false
 
 	print("Golpe ", combo_paso + 1, " — daño: ", dano)
 
@@ -131,8 +131,8 @@ func _ejecutar_ataque_cargado() -> void:
 	ataque_timer = 0.4
 	combo_paso = 0
 
-	$Hitbox.monitoring = true
-	$Hitbox.monitorable = true
+	$Visual/Hitbox.monitoring = true
+	$Visual/Hitbox.monitorable = true 
 
 	print("Ataque CARGADO — daño: ", DANO_CARGADO)
 
