@@ -18,6 +18,9 @@ const DANO_CARGADO = 35
 const TIEMPO_CARGA = 0.8
 const VENTANA_COMBO = 0.5
 
+var equipo_arma: Equipo = null
+var equipo_armadura: Equipo = null
+var equipo_accesorio: Equipo = null
 var nivel = 1
 var exp = 0
 var punto_reaparicion = Vector2.ZERO
@@ -185,16 +188,14 @@ func morir() -> void:
 
 func _on_hitbox_body_entered(body: Node) -> void:
 	if body.has_method("recibir_danio"):
-		var dano = DANO_CARGADO if carga_timer >= TIEMPO_CARGA else DANO_GOLPE[max(combo_paso - 1, 0)]
-		body.recibir_danio(dano)
-	if body.has_method("recibir_danio"):
+		var bono = equipo_arma.bono_danio if equipo_arma else 0
 		var dano: int
 		if patada_cooldown > COOLDOWN_PATADA - 0.3:
-			dano = DANO_PATADA
+			dano = DANO_PATADA + bono
 		elif carga_timer >= TIEMPO_CARGA:
-			dano = DANO_CARGADO
+			dano = DANO_CARGADO + bono + (nivel * 2)
 		else:
-			dano = DANO_GOLPE[max(combo_paso - 1, 0)]
+			dano = DANO_GOLPE[max(combo_paso - 1, 0)] + bono + (nivel * 2)
 		body.recibir_danio(dano)
 	
 		
