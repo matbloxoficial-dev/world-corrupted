@@ -8,8 +8,8 @@ const DASH_DURATION = 0.12
 const DASH_COOLDOWN = 0.8
 const DANO_PATADA = 14
 const COOLDOWN_PATADA = 3.0
-
-const MAX_HP = 80
+const EXP_POR_NIVEL = [0, 100, 250, 450, 700, 1000, 1350, 1750, 2200, 2700, 
+						3250, 3850, 4500, 5200, 5950, 6750, 7600, 8500, 9450, 10450]
 const INVENCIBILITY_TIME = 0.67
 
 # Combate
@@ -18,6 +18,8 @@ const DANO_CARGADO = 35
 const TIEMPO_CARGA = 0.8
 const VENTANA_COMBO = 0.5
 
+var nivel = 1
+var exp = 0
 var punto_reaparicion = Vector2.ZERO
 var hud = null
 var dash_timer = 0.0
@@ -26,6 +28,7 @@ var is_dashing = false
 var facing = 1
 var patada_cooldown = 0.0
 
+var MAX_HP = 80
 var hp = MAX_HP
 var is_invencible = false
 var invencibility_timer = 0.0
@@ -204,3 +207,20 @@ func _ejecutar_patada() -> void:
 	
 func _ready() -> void:
 	hud = get_tree().get_first_node_in_group("hud")
+
+func ganar_exp(cantidad: int) -> void:
+	exp += cantidad
+	print("EXP: ", exp, " / ", EXP_POR_NIVEL[nivel])
+	
+	if nivel < 20 and exp >= EXP_POR_NIVEL[nivel]:
+		_subir_nivel()
+
+func _subir_nivel() -> void:
+	nivel += 1
+	var hp_bonus = 20
+	MAX_HP += hp_bonus
+	hp = MAX_HP
+	print("NIVEL ", nivel, " — HP maximo: ", MAX_HP)
+	
+	if hud:
+		hud.actualizar_hp(hp, MAX_HP)

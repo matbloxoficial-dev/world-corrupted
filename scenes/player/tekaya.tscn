@@ -11,7 +11,7 @@ size = Vector2(29, 20)
 radius = 16.0
 height = 48.0
 
-[node name="Tekaya" type="CharacterBody2D"]
+[node name="Tekaya" type="CharacterBody2D" groups=["tekaya"]]
 script = ExtResource("1_ja0we")
 
 [node name="Visual" type="Node2D" parent="."]

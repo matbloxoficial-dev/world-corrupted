@@ -106,4 +106,9 @@ func recibir_danio(cantidad: int) -> void:
 func morir() -> void:
 	estado = Estado.MUERTO
 	print("Enemigo muerto")
+	
+	var tekaya = get_tree().get_first_node_in_group("tekaya")
+	if tekaya:
+		tekaya.ganar_exp(30)
+	
 	queue_free()
