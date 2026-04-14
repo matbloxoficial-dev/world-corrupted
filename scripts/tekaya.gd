@@ -18,6 +18,7 @@ const DANO_CARGADO = 35
 const TIEMPO_CARGA = 0.8
 const VENTANA_COMBO = 0.5
 
+var punto_reaparicion = Vector2.ZERO
 var hud = null
 var dash_timer = 0.0
 var dash_cooldown_timer = 0.0
@@ -168,11 +169,15 @@ func recibir_danio(cantidad: int) -> void:
 func morir() -> void:
 	set_physics_process(false)
 	await get_tree().create_timer(1.2).timeout
-	get_tree().reload_current_scene()
-
-@warning_ignore("unused_parameter")
-func _on_hitbox_area_entered(area: Area2D) -> void:
-	pass
+	
+	if punto_reaparicion != Vector2.ZERO:
+		hp = MAX_HP / 2
+		global_position = punto_reaparicion
+		set_physics_process(true)
+		if hud:
+			hud.actualizar_hp(hp, MAX_HP)
+	else:
+		get_tree().reload_current_scene()
 
 func _on_hitbox_body_entered(body: Node) -> void:
 	if body.has_method("recibir_danio"):

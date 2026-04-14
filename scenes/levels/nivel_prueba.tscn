@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2nrmhdibolff"]
+[gd_scene load_steps=7 format=3 uid="uid://c2nrmhdibolff"]
 
 [ext_resource type="PackedScene" uid="uid://dsmn575ms4yh" path="res://scenes/player/tekaya.tscn" id="1_guio4"]
 [ext_resource type="PackedScene" uid="uid://cwjto3bmnxdbt" path="res://scenes/enemies/enemigo_basico.tscn" id="2_uily5"]
 [ext_resource type="PackedScene" uid="uid://bqqo6xwqsedhv" path="res://scenes/ui/hud.tscn" id="3_nxs2r"]
+[ext_resource type="PackedScene" uid="uid://bm5g2aomqo5ea" path="res://scenes/levels/altar.tscn" id="4_rp4yx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7s6c7"]
 size = Vector2(27.3906, 5.125)
@@ -76,3 +77,6 @@ shape = SubResource("RectangleShape2D_57oob")
 position = Vector2(1207, 231)
 
 [node name="HUD" parent="." instance=ExtResource("3_nxs2r")]
+
+[node name="Altar" parent="." instance=ExtResource("4_rp4yx")]
+position = Vector2(1675, 540)
