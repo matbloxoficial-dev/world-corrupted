@@ -28,6 +28,7 @@ var is_dashing = false
 var facing = 1
 var patada_cooldown = 0.0
 
+var corrupcion = 0
 var MAX_HP = 80
 var hp = MAX_HP
 var is_invencible = false
@@ -224,3 +225,10 @@ func _subir_nivel() -> void:
 	
 	if hud:
 		hud.actualizar_hp(hp, MAX_HP)
+
+func agregar_corrupcion(cantidad: int) -> void:
+	corrupcion = min(corrupcion + cantidad, 100)
+	print("Corrupcion: ", corrupcion, " / 100")
+	
+	if corrupcion >= 75:
+		print("ADVERTENCIA INTERNA: Tekaya cerca del final oscuro")
