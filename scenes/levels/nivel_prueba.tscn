@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://c2nrmhdibolff"]
+[gd_scene load_steps=6 format=3 uid="uid://c2nrmhdibolff"]
 
 [ext_resource type="PackedScene" uid="uid://dsmn575ms4yh" path="res://scenes/player/tekaya.tscn" id="1_guio4"]
 [ext_resource type="PackedScene" uid="uid://cwjto3bmnxdbt" path="res://scenes/enemies/enemigo_basico.tscn" id="2_uily5"]
+[ext_resource type="PackedScene" uid="uid://bqqo6xwqsedhv" path="res://scenes/ui/hud.tscn" id="3_nxs2r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7s6c7"]
 size = Vector2(27.3906, 5.125)
@@ -73,3 +74,5 @@ shape = SubResource("RectangleShape2D_57oob")
 
 [node name="Enemigo" parent="Suelo" instance=ExtResource("2_uily5")]
 position = Vector2(1207, 231)
+
+[node name="HUD" parent="." instance=ExtResource("3_nxs2r")]

@@ -18,6 +18,7 @@ const DANO_CARGADO = 35
 const TIEMPO_CARGA = 0.8
 const VENTANA_COMBO = 0.5
 
+var hud = null
 var dash_timer = 0.0
 var dash_cooldown_timer = 0.0
 var is_dashing = false
@@ -152,6 +153,9 @@ func recibir_danio(cantidad: int) -> void:
 
 	hp -= cantidad
 	print("HP: ", hp, " / ", MAX_HP)
+	
+	if hud:
+		hud.actualizar_hp(hp, MAX_HP)
 
 	if hp <= 0:
 		morir()
@@ -166,6 +170,7 @@ func morir() -> void:
 	await get_tree().create_timer(1.2).timeout
 	get_tree().reload_current_scene()
 
+@warning_ignore("unused_parameter")
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	pass
 
@@ -191,3 +196,6 @@ func _ejecutar_patada() -> void:
 	$Visual/Hitbox.monitoring = true
 	$Visual/Hitbox.monitorable = true
 	print("Patada giratoria — daño: ", DANO_PATADA, " | Cooldown: ", COOLDOWN_PATADA, "s")
+	
+func _ready() -> void:
+	hud = get_tree().get_first_node_in_group("hud")

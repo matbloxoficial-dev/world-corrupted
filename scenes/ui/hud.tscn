@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://bqqo6xwqsedhv"]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_qdmaf"]
+
+[node name="HUD" type="CanvasLayer" groups=["hud"]]
+script = ExtResource("1_qdmaf")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="LabelHP" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "HP"
+
+[node name="BarraHP" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 14)
+layout_mode = 2
+max_value = 80.0
+value = 80.0
