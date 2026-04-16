@@ -18,6 +18,9 @@ const DANO_CARGADO = 35
 const TIEMPO_CARGA = 0.8
 const VENTANA_COMBO = 0.5
 
+
+var esencia_equipada_1: EsenciaBase = null
+var esencia_equipada_2: EsenciaBase = null
 var equipo_arma: Equipo = null
 var equipo_armadura: Equipo = null
 var equipo_accesorio: Equipo = null
@@ -45,6 +48,13 @@ var cargando = false
 var carga_timer = 0.0
 
 func _physics_process(delta: float) -> void:
+	# Usar esencia 1
+	if Input.is_action_just_pressed("use_essence") and esencia_equipada_1:
+		esencia_equipada_1.habilidad_1(self)
+
+	# Pasiva de esencia activa siempre corriendo
+	if esencia_equipada_1 and esencia_equipada_1.activa:
+		esencia_equipada_1.pasiva(self, delta)
 	# Temporizadores del dash
 	if is_dashing:
 		dash_timer -= delta
@@ -136,7 +146,7 @@ func _ejecutar_combo() -> void:
 	ataque_timer = 0.25
 
 	# Activa hitbox
-	$Visual/Hitbox.monitoring = false
+	$Visual/Hitbox.monitoring = false 
 	$Visual/Hitbox.monitorable = false
 
 	print("Golpe ", combo_paso + 1, " — daño: ", dano)
@@ -187,6 +197,8 @@ func morir() -> void:
 		get_tree().reload_current_scene()
 
 func _on_hitbox_body_entered(body: Node) -> void:
+	if body == self:
+		return
 	if body.has_method("recibir_danio"):
 		var bono = equipo_arma.bono_danio if equipo_arma else 0
 		var dano: int
@@ -209,7 +221,11 @@ func _ejecutar_patada() -> void:
 	
 func _ready() -> void:
 	hud = get_tree().get_first_node_in_group("hud")
-
+	# Equipar Esencia de Vida para prueba
+	var vida = EsenciaVida.new()
+	vida.activar()
+	esencia_equipada_1 = vida
+	add_child(vida)
 func ganar_exp(cantidad: int) -> void:
 	exp += cantidad
 	print("EXP: ", exp, " / ", EXP_POR_NIVEL[nivel])

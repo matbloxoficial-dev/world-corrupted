@@ -1,0 +1,88 @@
+[gd_scene load_steps=7 format=3 uid="uid://c2nrmhdibolff"]
+
+[ext_resource type="PackedScene" uid="uid://dsmn575ms4yh" path="res://scenes/player/tekaya.tscn" id="1_guio4"]
+[ext_resource type="PackedScene" uid="uid://cwjto3bmnxdbt" path="res://scenes/enemies/enemigo_basico.tscn" id="2_uily5"]
+[ext_resource type="PackedScene" uid="uid://bqqo6xwqsedhv" path="res://scenes/ui/hud.tscn" id="3_nxs2r"]
+[ext_resource type="PackedScene" uid="uid://bm5g2aomqo5ea" path="res://scenes/levels/altar.tscn" id="4_rp4yx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7s6c7"]
+size = Vector2(27.3906, 5.125)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_57oob"]
+
+[node name="NivelPrueba" type="Node2D"]
+
+[node name="Tekaya" parent="." instance=ExtResource("1_guio4")]
+position = Vector2(-305, -192)
+
+[node name="Suelo" type="StaticBody2D" parent="."]
+position = Vector2(0, 318)
+
+[node name="ColorRect" type="ColorRect" parent="Suelo"]
+custom_minimum_size = Vector2(640, 32)
+offset_left = -5819.0
+offset_top = 246.0
+offset_right = 5222.0
+offset_bottom = 414.0
+color = Color(2.35841e-06, 0.749006, 0.29876, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Suelo"]
+position = Vector2(0, 328)
+scale = Vector2(640, 32)
+shape = SubResource("RectangleShape2D_7s6c7")
+
+[node name="Plataforma1" type="StaticBody2D" parent="Suelo"]
+position = Vector2(143, 212)
+scale = Vector2(10, 2)
+
+[node name="ColorRect" type="ColorRect" parent="Suelo/Plataforma1"]
+offset_left = -9.98333
+offset_top = -10.2
+offset_right = 10.0167
+offset_bottom = 9.8
+color = Color(0, 1, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Suelo/Plataforma1"]
+shape = SubResource("RectangleShape2D_57oob")
+
+[node name="Plataforma2" type="StaticBody2D" parent="Suelo"]
+position = Vector2(391, 178)
+scale = Vector2(10, 2)
+
+[node name="ColorRect" type="ColorRect" parent="Suelo/Plataforma2"]
+offset_left = -9.98333
+offset_top = -10.2
+offset_right = 10.0167
+offset_bottom = 9.8
+color = Color(0, 1, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Suelo/Plataforma2"]
+shape = SubResource("RectangleShape2D_57oob")
+
+[node name="Plataforma3" type="StaticBody2D" parent="Suelo"]
+position = Vector2(699, 178)
+scale = Vector2(10, 2)
+
+[node name="ColorRect" type="ColorRect" parent="Suelo/Plataforma3"]
+offset_left = -9.98333
+offset_top = -10.2
+offset_right = 10.0167
+offset_bottom = 9.8
+color = Color(0, 1, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Suelo/Plataforma3"]
+shape = SubResource("RectangleShape2D_57oob")
+
+[node name="Enemigo" parent="Suelo" instance=ExtResource("2_uily5")]
+position = Vector2(1207, 231)
+
+[node name="Enemigo2" parent="Suelo" instance=ExtResource("2_uily5")]
+position = Vector2(-864, 236)
+
+[node name="Enemigo3" parent="Suelo" instance=ExtResource("2_uily5")]
+position = Vector2(2019, 231)
+
+[node name="HUD" parent="." instance=ExtResource("3_nxs2r")]
+
+[node name="Altar" parent="." instance=ExtResource("4_rp4yx")]
+position = Vector2(1675, 540)
