@@ -273,6 +273,9 @@ func _on_hitbox_body_entered(body: Node) -> void:
 
 
 func _ready() -> void:
+	if hud:
+		hud.actualizar_hp(hp, MAX_HP)
+		hud.actualizar_exp(exp, EXP_POR_NIVEL[nivel], nivel)
 	hp = MAX_HP
 	hud = get_tree().get_first_node_in_group("hud")
 	
@@ -287,7 +290,10 @@ func _ready() -> void:
 func ganar_exp(cantidad: int) -> void:
 	exp += cantidad
 	print("EXP: ", exp, " / ", EXP_POR_NIVEL[nivel])
-
+	
+	if hud:
+		hud.actualizar_exp(exp, EXP_POR_NIVEL[nivel], nivel)
+	
 	if nivel < 20 and exp >= EXP_POR_NIVEL[nivel]:
 		_subir_nivel()
 
@@ -297,11 +303,11 @@ func _subir_nivel() -> void:
 	var hp_bonus = 20
 	MAX_HP += hp_bonus
 	hp = MAX_HP
-
 	print("NIVEL ", nivel)
-
+	
 	if hud:
 		hud.actualizar_hp(hp, MAX_HP)
+		hud.actualizar_exp(0, EXP_POR_NIVEL[nivel], nivel)
 
 
 func agregar_corrupcion(cantidad: int) -> void:
