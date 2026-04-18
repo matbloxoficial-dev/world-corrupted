@@ -20,6 +20,7 @@ const VENTANA_COMBO = 0.5
 
 @onready var anim = $Visual/AnimatedSprite2D
 
+var hurt_timer = 0.0
 var esencia_equipada_1: EsenciaBase = null
 var esencia_equipada_2: EsenciaBase = null
 var equipo_arma: Equipo = null
@@ -138,15 +139,34 @@ func _physics_process(delta: float) -> void:
 	# Patada
 	if Input.is_action_just_pressed("kick") and patada_cooldown <= 0 and not atacando:
 		_ejecutar_patada()
-
+		
+	if Input.is_action_just_pressed("save_game"):
+		SaveManager.guardar(self)
+	
+	if Input.is_action_just_pressed("load_game"):
+		SaveManager.cargar(self)
+		if hud:
+			hud.actualizar_hp(hp, MAX_HP)
 	move_and_slide()
 
-	# 🎬 ANIMACIONES PRO
+	if hurt_timer > 0:
+		hurt_timer -= delta
+		return
+	# ANIMACIONES
 	var anim_actual = anim.animation
 
+	if is_dashing:
+		if anim_actual != "dash":
+			anim.play("dash")
+		return
+
 	if atacando:
-		if anim_actual != "attack":
-			anim.play("attack")
+		if patada_cooldown > COOLDOWN_PATADA - 0.3:
+			if anim_actual != "kick":
+				anim.play("kick")
+		else:
+			if anim_actual != "attack":
+				anim.play("attack")
 		return
 
 	if not is_on_floor():
@@ -215,9 +235,12 @@ func recibir_danio(cantidad: int) -> void:
 	is_invencible = true
 	invencibility_timer = INVENCIBILITY_TIME
 	modulate.a = 0.4
+	anim.play("hurt")
+	hurt_timer = 0.4
 
 
 func morir() -> void:
+	anim.play("death")
 	set_physics_process(false)
 	await get_tree().create_timer(1.2).timeout
 
