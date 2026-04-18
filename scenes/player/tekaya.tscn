@@ -342,9 +342,8 @@ shape = SubResource("RectangleShape2D_wgdx7")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visual"]
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_285vb")
-animation = &"hurt"
+animation = &"attack"
 frame = 3
-frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-4, 6)

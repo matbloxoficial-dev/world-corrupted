@@ -20,6 +20,7 @@ const VENTANA_COMBO = 0.5
 
 @onready var anim = $Visual/AnimatedSprite2D
 
+var SPEED_MODIFICADOR = 1.0
 var hurt_timer = 0.0
 var esencia_equipada_1: EsenciaBase = null
 var esencia_equipada_2: EsenciaBase = null
@@ -48,9 +49,15 @@ var atacando = false
 var ataque_timer = 0.0
 var cargando = false
 var carga_timer = 0.0
+var ralentizacion_timer = 0.0
 
+func aplicar_ralentizacion(duracion: float) -> void:
+	SPEED_MODIFICADOR = 0.4
+	ralentizacion_timer = duracion
+	print("Tekaya ralentizado")
+	
 func _physics_process(delta: float) -> void:
-
+	
 	# Usar esencia
 	if Input.is_action_just_pressed("use_essence") and esencia_equipada_1:
 		esencia_equipada_1.habilidad_1(self)
@@ -63,6 +70,12 @@ func _physics_process(delta: float) -> void:
 		dash_timer -= delta
 		if dash_timer <= 0:
 			is_dashing = false
+
+	if ralentizacion_timer > 0:
+		ralentizacion_timer -= delta
+		if ralentizacion_timer <= 0:
+			SPEED_MODIFICADOR = 1.0
+			print("Velocidad restaurada")
 
 	if dash_cooldown_timer > 0:
 		dash_cooldown_timer -= delta
@@ -132,7 +145,7 @@ func _physics_process(delta: float) -> void:
 		if direction != 0:
 			facing = 1 if direction > 0 else -1
 			$Visual.scale.x = facing
-			velocity.x = direction * SPEED
+			velocity.x = direction * SPEED * SPEED_MODIFICADOR
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 

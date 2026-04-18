@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://c2nrmhdibolff"]
+[gd_scene load_steps=8 format=3 uid="uid://c2nrmhdibolff"]
 
 [ext_resource type="PackedScene" uid="uid://dsmn575ms4yh" path="res://scenes/player/tekaya.tscn" id="1_guio4"]
 [ext_resource type="PackedScene" uid="uid://cwjto3bmnxdbt" path="res://scenes/enemies/enemigo_basico.tscn" id="2_uily5"]
 [ext_resource type="PackedScene" uid="uid://bqqo6xwqsedhv" path="res://scenes/ui/hud.tscn" id="3_nxs2r"]
 [ext_resource type="PackedScene" uid="uid://bm5g2aomqo5ea" path="res://scenes/levels/altar.tscn" id="4_rp4yx"]
+[ext_resource type="PackedScene" uid="uid://bp6mdr4pakei" path="res://scenes/enemies/arana_tray.tscn" id="5_jymbi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7s6c7"]
 size = Vector2(27.3906, 5.125)
@@ -73,16 +74,19 @@ color = Color(0, 1, 1, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Suelo/Plataforma3"]
 shape = SubResource("RectangleShape2D_57oob")
 
-[node name="Enemigo" parent="Suelo" instance=ExtResource("2_uily5")]
-position = Vector2(1207, 231)
-
-[node name="Enemigo2" parent="Suelo" instance=ExtResource("2_uily5")]
-position = Vector2(-864, 236)
-
-[node name="Enemigo3" parent="Suelo" instance=ExtResource("2_uily5")]
-position = Vector2(2019, 231)
-
 [node name="HUD" parent="." instance=ExtResource("3_nxs2r")]
 
 [node name="Altar" parent="." instance=ExtResource("4_rp4yx")]
 position = Vector2(1675, 540)
+
+[node name="Enemigo" parent="." instance=ExtResource("2_uily5")]
+position = Vector2(1207, 549)
+
+[node name="Enemigo2" parent="." instance=ExtResource("2_uily5")]
+position = Vector2(-864, 554)
+
+[node name="Enemigo3" parent="." instance=ExtResource("2_uily5")]
+position = Vector2(2019, 549)
+
+[node name="AranaTray" parent="." instance=ExtResource("5_jymbi")]
+position = Vector2(2903, 548)
