@@ -22,11 +22,14 @@ func habilidad_1(tekaya: Node) -> void:
 	
 	if tekaya.hud:
 		tekaya.hud.actualizar_hp(tekaya.hp, tekaya.MAX_HP)
+		tekaya.hud.actualizar_alma(alma, MAX_ALMA)
 	
 	print("Pulso Vital — curado: ", tekaya.hp - hp_anterior, " HP | Alma: ", alma, " / ", MAX_ALMA)
 
-func ganar_alma(cantidad: int) -> void:
+func ganar_alma(cantidad: int, tekaya: Node = null) -> void:
 	alma = min(alma + cantidad, MAX_ALMA)
+	if tekaya and tekaya.hud:
+		tekaya.hud.actualizar_alma(alma, MAX_ALMA)
 	print("Alma: ", alma, " / ", MAX_ALMA)
 
 func pasiva(tekaya: Node, delta: float) -> void:

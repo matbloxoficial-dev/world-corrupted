@@ -111,7 +111,7 @@ func morir() -> void:
 		jugador.ganar_exp(30)
 	
 	if jugador and jugador.esencia_equipada_1 and jugador.esencia_equipada_1.has_method("ganar_alma"):
-		jugador.esencia_equipada_1.ganar_alma(35)
+		jugador.esencia_equipada_1.ganar_alma(35, jugador)
 	
 	queue_free()
 	
