@@ -18,6 +18,7 @@ const DANO_CARGADO = 35
 const TIEMPO_CARGA = 0.8
 const VENTANA_COMBO = 0.5
 
+@onready var anim = $Visual/AnimatedSprite2D
 
 var esencia_equipada_1: EsenciaBase = null
 var esencia_equipada_2: EsenciaBase = null
@@ -48,14 +49,15 @@ var cargando = false
 var carga_timer = 0.0
 
 func _physics_process(delta: float) -> void:
-	# Usar esencia 1
+
+	# Usar esencia
 	if Input.is_action_just_pressed("use_essence") and esencia_equipada_1:
 		esencia_equipada_1.habilidad_1(self)
 
-	# Pasiva de esencia activa siempre corriendo
 	if esencia_equipada_1 and esencia_equipada_1.activa:
 		esencia_equipada_1.pasiva(self, delta)
-	# Temporizadores del dash
+
+	# Timers
 	if is_dashing:
 		dash_timer -= delta
 		if dash_timer <= 0:
@@ -66,7 +68,7 @@ func _physics_process(delta: float) -> void:
 		
 	if patada_cooldown > 0:
 		patada_cooldown -= delta
-		
+
 	# Invencibilidad
 	if is_invencible:
 		invencibility_timer -= delta
@@ -74,13 +76,13 @@ func _physics_process(delta: float) -> void:
 			is_invencible = false
 			modulate.a = 1.0
 
-	# Combo timer — si pasa mucho tiempo sin atacar, reinicia
+	# Combo
 	if combo_paso > 0 and not atacando:
 		combo_timer -= delta
 		if combo_timer <= 0:
 			combo_paso = 0
 
-	# Ataque timer — duración de cada golpe
+	# Ataque timer
 	if atacando:
 		ataque_timer -= delta
 		if ataque_timer <= 0:
@@ -88,7 +90,7 @@ func _physics_process(delta: float) -> void:
 			$Visual/Hitbox.monitoring = false
 			$Visual/Hitbox.monitorable = false
 
-	# Carga del ataque cargado
+	# Carga
 	if cargando:
 		carga_timer += delta
 
@@ -108,12 +110,12 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Ataque — presionar
+	# Ataque presionar
 	if Input.is_action_just_pressed("attack") and not atacando:
 		cargando = true
 		carga_timer = 0.0
 
-	# Ataque — soltar
+	# Ataque soltar
 	if Input.is_action_just_released("attack"):
 		if cargando:
 			if carga_timer >= TIEMPO_CARGA:
@@ -123,8 +125,8 @@ func _physics_process(delta: float) -> void:
 			cargando = false
 			carga_timer = 0.0
 
-	# Movimiento horizontal
-	if not is_dashing:
+	# Movimiento
+	if not is_dashing and not atacando:
 		var direction = Input.get_axis("move_left", "move_right")
 		if direction != 0:
 			facing = 1 if direction > 0 else -1
@@ -132,12 +134,31 @@ func _physics_process(delta: float) -> void:
 			velocity.x = direction * SPEED
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
-			
-	# Patada giratoria
+
+	# Patada
 	if Input.is_action_just_pressed("kick") and patada_cooldown <= 0 and not atacando:
 		_ejecutar_patada()
-		
+
 	move_and_slide()
+
+	# 🎬 ANIMACIONES PRO
+	var anim_actual = anim.animation
+
+	if atacando:
+		if anim_actual != "attack":
+			anim.play("attack")
+		return
+
+	if not is_on_floor():
+		if anim_actual != "jump":
+			anim.play("jump")
+	elif abs(velocity.x) > 10:
+		if anim_actual != "run":
+			anim.play("run")
+	else:
+		if anim_actual != "idle":
+			anim.play("idle")
+
 
 func _ejecutar_combo() -> void:
 	atacando = true
@@ -145,9 +166,8 @@ func _ejecutar_combo() -> void:
 	var dano = DANO_GOLPE[combo_paso]
 	ataque_timer = 0.25
 
-	# Activa hitbox
-	$Visual/Hitbox.monitoring = false 
-	$Visual/Hitbox.monitorable = false
+	$Visual/Hitbox.monitoring = true
+	$Visual/Hitbox.monitorable = true
 
 	print("Golpe ", combo_paso + 1, " — daño: ", dano)
 
@@ -155,15 +175,28 @@ func _ejecutar_combo() -> void:
 	if combo_paso >= 3:
 		combo_paso = 0
 
+
 func _ejecutar_ataque_cargado() -> void:
 	atacando = true
 	ataque_timer = 0.4
 	combo_paso = 0
 
 	$Visual/Hitbox.monitoring = true
-	$Visual/Hitbox.monitorable = true 
+	$Visual/Hitbox.monitorable = true
 
 	print("Ataque CARGADO — daño: ", DANO_CARGADO)
+
+
+func _ejecutar_patada() -> void:
+	patada_cooldown = COOLDOWN_PATADA
+	atacando = true
+	ataque_timer = 0.3
+
+	$Visual/Hitbox.monitoring = true
+	$Visual/Hitbox.monitorable = true
+
+	print("Patada giratoria — daño: ", DANO_PATADA)
+
 
 func recibir_danio(cantidad: int) -> void:
 	if is_invencible:
@@ -171,7 +204,7 @@ func recibir_danio(cantidad: int) -> void:
 
 	hp -= cantidad
 	print("HP: ", hp, " / ", MAX_HP)
-	
+
 	if hud:
 		hud.actualizar_hp(hp, MAX_HP)
 
@@ -183,10 +216,11 @@ func recibir_danio(cantidad: int) -> void:
 	invencibility_timer = INVENCIBILITY_TIME
 	modulate.a = 0.4
 
+
 func morir() -> void:
 	set_physics_process(false)
 	await get_tree().create_timer(1.2).timeout
-	
+
 	if punto_reaparicion != Vector2.ZERO:
 		hp = MAX_HP / 2
 		global_position = punto_reaparicion
@@ -196,56 +230,57 @@ func morir() -> void:
 	else:
 		get_tree().reload_current_scene()
 
+
 func _on_hitbox_body_entered(body: Node) -> void:
 	if body == self:
 		return
+
 	if body.has_method("recibir_danio"):
 		var bono = equipo_arma.bono_danio if equipo_arma else 0
 		var dano: int
+
 		if patada_cooldown > COOLDOWN_PATADA - 0.3:
 			dano = DANO_PATADA + bono
 		elif carga_timer >= TIEMPO_CARGA:
 			dano = DANO_CARGADO + bono + (nivel * 2)
 		else:
 			dano = DANO_GOLPE[max(combo_paso - 1, 0)] + bono + (nivel * 2)
+
 		body.recibir_danio(dano)
-	
-		
-func _ejecutar_patada() -> void:
-	patada_cooldown = COOLDOWN_PATADA
-	atacando = true
-	ataque_timer = 0.3
-	$Visual/Hitbox.monitoring = true
-	$Visual/Hitbox.monitorable = true
-	print("Patada giratoria — daño: ", DANO_PATADA, " | Cooldown: ", COOLDOWN_PATADA, "s")
-	
+
+
 func _ready() -> void:
+	hp = MAX_HP
 	hud = get_tree().get_first_node_in_group("hud")
-	# Equipar Esencia de Vida para prueba
+	
 	var vida = EsenciaVida.new()
 	vida.activar()
 	esencia_equipada_1 = vida
 	add_child(vida)
+	
+	if hud:
+		hud.actualizar_hp(hp, MAX_HP)
+
 func ganar_exp(cantidad: int) -> void:
 	exp += cantidad
 	print("EXP: ", exp, " / ", EXP_POR_NIVEL[nivel])
-	
+
 	if nivel < 20 and exp >= EXP_POR_NIVEL[nivel]:
 		_subir_nivel()
+
 
 func _subir_nivel() -> void:
 	nivel += 1
 	var hp_bonus = 20
 	MAX_HP += hp_bonus
 	hp = MAX_HP
-	print("NIVEL ", nivel, " — HP maximo: ", MAX_HP)
-	
+
+	print("NIVEL ", nivel)
+
 	if hud:
 		hud.actualizar_hp(hp, MAX_HP)
 
+
 func agregar_corrupcion(cantidad: int) -> void:
 	corrupcion = min(corrupcion + cantidad, 100)
-	print("Corrupcion: ", corrupcion, " / 100")
-	
-	if corrupcion >= 75:
-		print("ADVERTENCIA INTERNA: Tekaya cerca del final oscuro")
+	print("Corrupcion: ", corrupcion)

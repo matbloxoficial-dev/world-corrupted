@@ -107,8 +107,12 @@ func morir() -> void:
 	estado = Estado.MUERTO
 	print("Enemigo muerto")
 	
-	var tekaya = get_tree().get_first_node_in_group("tekaya")
-	if tekaya:
-		tekaya.ganar_exp(30)
+	if jugador and jugador.has_method("ganar_exp"):
+		jugador.ganar_exp(30)
+	
+	if jugador and jugador.esencia_equipada_1 and jugador.esencia_equipada_1.has_method("ganar_alma"):
+		jugador.esencia_equipada_1.ganar_alma(35)
+	
+	queue_free()
 	
 	queue_free()

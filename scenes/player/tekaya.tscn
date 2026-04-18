@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cq1cebmfxdpt" path="res://assets/sprites/player/Tekaya-temp/Owlet_Monster_Run_6.png" id="5_8jjjh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wgdx7"]
-size = Vector2(29, 20)
+size = Vector2(16.5, 19)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_do1bi"]
 atlas = ExtResource("2_pda4j")
@@ -201,8 +201,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ch03j"]
-radius = 16.0
-height = 32.0
+radius = 20.0
+height = 54.0
 
 [node name="Tekaya" type="CharacterBody2D" groups=["tekaya"]]
 script = ExtResource("1_ja0we")
@@ -213,24 +213,18 @@ script = ExtResource("1_ja0we")
 monitoring = false
 monitorable = false
 
-[node name="ColorRect" type="ColorRect" parent="Visual/Hitbox"]
-offset_left = 16.0
-offset_top = -10.0
-offset_right = 45.0
-offset_bottom = 10.0
-color = Color(1, 1, 0, 1)
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Visual/Hitbox"]
-position = Vector2(30.5, 0)
+position = Vector2(23.75, 11.5)
 shape = SubResource("RectangleShape2D_wgdx7")
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="Visual"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visual"]
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_285vb")
-animation = &"jump"
-frame = 7
-frame_progress = 1.0
+animation = &"attack"
+frame = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-4, 6)
 shape = SubResource("CapsuleShape2D_ch03j")
 
 [node name="Camera2D" type="Camera2D" parent="."]
