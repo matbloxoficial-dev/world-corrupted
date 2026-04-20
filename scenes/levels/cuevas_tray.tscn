@@ -2663,7 +2663,7 @@ sources/0 = SubResource("TileSetAtlasSource_1r6r6")
 [node name="CuevasTray" type="Node2D"]
 
 [node name="Tekaya" parent="." instance=ExtResource("2_0f4rp")]
-position = Vector2(7634, 270)
+position = Vector2(1067, 1128)
 
 [node name="Terreno" type="TileMapLayer" parent="."]
 position = Vector2(-35, 310)
